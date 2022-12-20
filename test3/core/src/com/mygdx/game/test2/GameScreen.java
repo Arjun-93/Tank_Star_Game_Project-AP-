@@ -234,6 +234,17 @@ import java.util.LinkedList;
 import java.util.Queue;
 //import com.mygdx.game.MyGdxGame;
 
+class QueueCloner {
+
+    public static Queue<String> cloneQueue(Queue<String> queue) {
+        Queue<String> clone = new LinkedList<>();
+        for (String element : queue) {
+            // We don't need to create a deep copy of each element in the queue, because Strings are immutable
+            clone.add(element);
+        }
+        return clone;
+    }
+}
 public class GameScreen extends ApplicationAdapter implements Screen {
 
     private Stage stage;
