@@ -18,7 +18,7 @@ public class MyGdxGame extends Game {
 
     public void create () {
         gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        this.setScreen(new playscreen(this));
+        this.setScreen(new TitleScreen(this));
     }
 
     public void render () {
