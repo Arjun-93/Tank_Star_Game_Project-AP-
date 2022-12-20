@@ -30,7 +30,8 @@ public class playscreen implements Screen{
     private OrthographicCamera camera;
 //    private Texture texture;
     private SpriteBatch sb;
-    private Sprite sprite;
+    private Sprite tankbody;
+    private Sprite tanknosal;
     private Viewport gamePort;
 
     // Box2D Variables
@@ -44,7 +45,7 @@ public class playscreen implements Screen{
 
     float px,py,velocityX, velocityY;
     private PolygonShape shape;
-    private Sprite nosal;
+
 
     public playscreen(MyGdxGame game){
         this.game = game;
@@ -57,11 +58,28 @@ public class playscreen implements Screen{
         map = mapLoader.load("MAAP/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        sprite = new Sprite(new Texture("Abrams.png"));
-        nosal = new Sprite(new Texture("nosal.png"));
-        nosal.setPosition(50,1180);
-        sprite.setPosition(50,1140);
         sb =  new SpriteBatch();
+
+        // Tank Body Fixtures
+        tankbody = new Sprite(new Texture("Abrams.png"));
+        tankbody.setPosition(50,1140);
+        tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
+        BodyDef body_tank = new BodyDef();
+        body_tank.type = BodyDef.BodyType.DynamicBody;
+        body_tank.position.set(tankbody.getX(), tankbody.getY());
+        Body tbody = world.createBody(body_tank);
+        PolygonShape tankshape = new PolygonShape();
+        tankshape.setAsBox(tankbody.getWidth() / 2, tankbody.getHeight() / 2);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = tankshape;
+        fixtureDef.density = 1.0f;
+        Fixture fixture = tbody.createFixture(fixtureDef);
+//        tankbody.setUserData(tbody);
+
+        // Tank Nosal Fixtures
+        tanknosal = new Sprite(new Texture("nosal.png"));
+        tanknosal.setPosition(50,1140);
+//        tanknosal.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
 
 
         // Box2d Variables
@@ -98,12 +116,12 @@ public class playscreen implements Screen{
     }
     public void handleInput(float delta){
         if(Gdx.input.isKeyPressed(Input.Keys.A))
-            sprite.setPosition(sprite.getX() - 25*delta, sprite.getY());
-            nosal.setPosition(sprite.getX() - 25*delta, sprite.getY());
+            tankbody.setPosition(tankbody.getX() - 30*delta, tankbody.getY());
+            tanknosal.setPosition(tankbody.getX() - 30*delta, tankbody.getY());
 
         if(Gdx.input.isKeyPressed(Input.Keys.D))
-            sprite.setPosition(sprite.getX() + 25*delta, sprite.getY());
-            nosal.setPosition(sprite.getX() + 25*delta, sprite.getY());
+            tankbody.setPosition(tankbody.getX() + 25*delta, tankbody.getY());
+            tanknosal.setPosition(tankbody.getX() + 25*delta, tankbody.getY());
     }
 
     @Override
@@ -127,8 +145,8 @@ public class playscreen implements Screen{
 
         sb.begin();
         sb.setProjectionMatrix(camera.combined);
-        sprite.draw(sb);
-        nosal.draw(sb);
+        tankbody.draw(sb);
+        tanknosal.draw(sb);
         sb.end();
 
 
