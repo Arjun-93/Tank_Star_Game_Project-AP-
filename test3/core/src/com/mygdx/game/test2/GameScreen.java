@@ -447,10 +447,11 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         backButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println(q);
                 String str = "Buratino.png";
                 Queue<String> tempq = new LinkedList<>();
                 tempq = qc.cloneQueue(q);
-                tempq.remove();
+                tempq.poll();
                 System.out.println(tempq);
                 if(tempq.peek().equals("Frost")){
                     str = "frost.png";

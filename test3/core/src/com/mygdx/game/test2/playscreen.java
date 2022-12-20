@@ -53,10 +53,13 @@ public class playscreen implements Screen{
     private Fixture fixture;
 
 
-    public playscreen(Game game, String str){
+    public playscreen(Game game, String str) {
+
         this.game = game;
         camera = new OrthographicCamera();
-//        tank = new MyTank(this,"Abrams.png");
+        world = new World(new Vector2(0, 0), true);
+        b2dr = new Box2DDebugRenderer();
+        sb = new SpriteBatch();
 
         // Map Loading
         gamePort = new FitViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, camera);
@@ -64,13 +67,30 @@ public class playscreen implements Screen{
         map = mapLoader.load("MAAP/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
+        camera.position.set(gamePort.getWorldWidth()/2, gamePort.getWorldHeight()/2,0);
+        // Box2d Variables
+        BodyDef bodyDef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
 
+        // Make the ground Solid , for applying physics
+        for (RectangleMapObject object : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)) {
+            Rectangle rect = object.getRectangle();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.position.set(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
+//            bodyDef.position.set(w/2+rect.getWidth()/2,rect.getHeight()+h/2);
+            body = world.createBody(bodyDef);
+            shape.setAsBox(rect.getWidth() / 2, rect.getHeight() / 2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
 
-        sb =  new SpriteBatch();
-        world  = new World(new Vector2(0,0), true);
+        tank = new MyTank(this, str);
+
         // Tank Body Fixtures
         tankbody = new Sprite(new Texture(str));
-        tankbody.setPosition(50,1140);
+        tankbody.setPosition(50, 1140);
         //tankbody.setSize(100, 200);
         BodyDef body_tank = new BodyDef();
         body_tank.type = BodyDef.BodyType.DynamicBody;
@@ -83,7 +103,7 @@ public class playscreen implements Screen{
         fixturetank.density = 1.0f;
         Fixture fixture = tbody.createFixture(fixturetank);
         tbody.setUserData(tankbody);
-//        tankbody.setUserData(tbody);
+        tbody.setUserData(tbody);
 
 
         // Tank Nosal Fixtures
@@ -101,28 +121,6 @@ public class playscreen implements Screen{
         fixturenosal.density = 1.0f;
         Fixture fixturen = tbody.createFixture(fixturetank);
         nosalBody.setUserData(tanknosal);
-
-
-
-        // Box2d Variables
-
-        b2dr = new Box2DDebugRenderer();
-        BodyDef bodyDef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        for ( RectangleMapObject object : map.getLayers().get(1).getObjects().getByType(RectangleMapObject.class)
-        ){
-            Rectangle rect = object.getRectangle();
-            bodyDef.type = BodyDef.BodyType.StaticBody;
-            bodyDef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
-//            bodyDef.position.set(w/2+rect.getWidth()/2,rect.getHeight()+h/2);
-            body = world.createBody(bodyDef);
-            shape.setAsBox(rect.getWidth()/2 , rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
 
     }
 
@@ -162,20 +160,18 @@ public class playscreen implements Screen{
         nosalBody.setUserData(tanknosal);
 
     }
-
     public static World getWorld(){
         return world;
     }
     public void update(float delta){
-
-        world.step(1/60f,6,2);
+        world.step(1/60f,10,5);
         handleInput(delta);
         camera.update();
+//        tank.updateTank(delta);
         renderer.setView(camera);
     }
     public void handleInput(float delta){
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-
             tankbody.setPosition(tankbody.getX() - 30 * delta, tankbody.getY());
             tanknosal.setPosition(tankbody.getX() - 30 * delta, tankbody.getY());
         }
@@ -183,6 +179,17 @@ public class playscreen implements Screen{
             tankbody.setPosition(tankbody.getX() + 25 * delta, tankbody.getY());
             tanknosal.setPosition(tankbody.getX() + 25 * delta, tankbody.getY());
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)){
+            tank.b2body.applyLinearImpulse(new Vector2(0,5f), tank.b2body.getWorldCenter(),true);
+        }
+
+
+//        if(Gdx.input.isKeyPressed(Input.Keys.LEFT) && tank.b2body.getLinearVelocity().x >=-2){
+//            tank.b2body.applyLinearImpulse(new Vector2(-10f,0), tank.b2body.getWorldCenter(),true);
+//        }
+//        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT) && tank.b2body.getLinearVelocity().x <=2){
+//            tank.b2body.applyLinearImpulse(new Vector2(10f,0), tank.b2body.getWorldCenter(),true);
+//        }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             // Create a new bullet fixture
@@ -212,22 +219,24 @@ public class playscreen implements Screen{
 
     }
 
-    @Override
-    public void render(float delta)
 
-    {
+
+    @Override
+    public void render(float delta) {
         update(delta);
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         renderer.render();
         b2dr.render(world,camera.combined);
+
+//        batch.setProjectionMatrix(camera.combined);
         renderer.setView(camera);
         camera.setToOrtho(false,w/2-3000,h/2);
         camera.update();
 
         sb.begin();
-        sb.setProjectionMatrix(camera.combined);
+//        tank.draw(sb);
         tankbody.draw(sb);
         tanknosal.draw(sb);
         sb.end();
@@ -238,7 +247,6 @@ public class playscreen implements Screen{
     public void resize(int width, int height) {
         gamePort.update(width,height);
     }
-
     @Override
     public void pause() {
 
@@ -253,7 +261,10 @@ public class playscreen implements Screen{
     }
     @Override
     public void dispose() {
-        shape.dispose();
+//        map.dispose();
+//        renderer.dispose();
+//        b2dr.dispose();
+//        world.dispose();
     }
 }
 
