@@ -70,10 +70,13 @@ public class playscreen implements Screen{
         Body tbody = world.createBody(body_tank);
         PolygonShape tankshape = new PolygonShape();
         tankshape.setAsBox(tankbody.getWidth() / 2, tankbody.getHeight() / 2);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = tankshape;
-        fixtureDef.density = 1.0f;
-        Fixture fixture = tbody.createFixture(fixtureDef);
+        FixtureDef fixturetank = new FixtureDef();
+        fixturetank.shape = tankshape;
+        fixturetank.density = 1.0f;
+        Fixture fixture = tbody.createFixture(fixturetank);
+        tbody.setUserData(tankbody);
+//        tankbody.setUserData(tbody);
+
 //        tankbody.setUserData(tbody);
 
         // Tank Nosal Fixtures
