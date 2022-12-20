@@ -1,5 +1,6 @@
 package com.mygdx.game.test2;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
@@ -22,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 public class playscreen implements Screen{
 
     private Stage stage;
-    private MyGdxGame game;
+    private Game game;
     private OrthogonalTiledMapRenderer renderer;
     private TiledMap map;
     TmxMapLoader mapLoader;
@@ -35,7 +36,7 @@ public class playscreen implements Screen{
     private Viewport gamePort;
 
     // Box2D Variables
-    private World world;
+    private static World world;
     private Box2DDebugRenderer b2dr;
     float x, y;
 
@@ -46,11 +47,16 @@ public class playscreen implements Screen{
     float px,py,velocityX, velocityY;
     private PolygonShape shape;
 
+    public MyTank tank;
+    private int lastMouseX = 0;
+    private int lastMouseY = 0;
+    private Fixture fixture;
 
-    public playscreen(MyGdxGame game){
+
+    public playscreen(Game game, String str){
         this.game = game;
         camera = new OrthographicCamera();
-
+//        tank = new MyTank(this,"Abrams.png");
 
         // Map Loading
         gamePort = new FitViewport(MyGdxGame.V_WIDTH, MyGdxGame.V_HEIGHT, camera);
@@ -58,12 +64,14 @@ public class playscreen implements Screen{
         map = mapLoader.load("MAAP/map.tmx");
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        sb =  new SpriteBatch();
 
+
+        sb =  new SpriteBatch();
+        world  = new World(new Vector2(0,0), true);
         // Tank Body Fixtures
-        tankbody = new Sprite(new Texture("Abrams.png"));
+        tankbody = new Sprite(new Texture(str));
         tankbody.setPosition(50,1140);
-        tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
+        //tankbody.setSize(100, 200);
         BodyDef body_tank = new BodyDef();
         body_tank.type = BodyDef.BodyType.DynamicBody;
         body_tank.position.set(tankbody.getX(), tankbody.getY());
@@ -77,16 +85,27 @@ public class playscreen implements Screen{
         tbody.setUserData(tankbody);
 //        tankbody.setUserData(tbody);
 
-//        tankbody.setUserData(tbody);
 
         // Tank Nosal Fixtures
         tanknosal = new Sprite(new Texture("nosal.png"));
-        tanknosal.setPosition(50,1140);
-//        tanknosal.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
+//        tanknosal.setPosition(50,1200);
+//        tankbody.setSize(40, 20);
+        BodyDef body_tank_nosal = new BodyDef();
+        body_tank_nosal.type = BodyDef.BodyType.DynamicBody;
+        body_tank_nosal.position.set(tanknosal.getX(), tanknosal.getY());
+        Body nosalBody = world.createBody(body_tank_nosal);
+        PolygonShape nosalshape = new PolygonShape();
+        tankshape.setAsBox(tanknosal.getWidth() / 2, tanknosal.getHeight() / 2);
+        FixtureDef fixturenosal = new FixtureDef();
+        fixturenosal.shape = tankshape;
+        fixturenosal.density = 1.0f;
+        Fixture fixturen = tbody.createFixture(fixturetank);
+        nosalBody.setUserData(tanknosal);
+
 
 
         // Box2d Variables
-        world  = new World(new Vector2(0,0), true);
+
         b2dr = new Box2DDebugRenderer();
         BodyDef bodyDef = new BodyDef();
         PolygonShape shape = new PolygonShape();
@@ -107,9 +126,46 @@ public class playscreen implements Screen{
 
     }
 
-//    public World getWorld(){
-//        return world;
-//    }
+    public void TankBody(String str){
+        //  Tank Body Fixtures
+        tankbody = new Sprite(new Texture(str));
+        tankbody.setPosition(50,1140);
+        tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
+        BodyDef body_tank = new BodyDef();
+        body_tank.type = BodyDef.BodyType.DynamicBody;
+        body_tank.position.set(tankbody.getX(), tankbody.getY());
+        Body tbody = world.createBody(body_tank);
+        PolygonShape tankshape = new PolygonShape();
+        tankshape.setAsBox(tankbody.getWidth() / 2, tankbody.getHeight() / 2);
+        FixtureDef fixturetank = new FixtureDef();
+        fixturetank.shape = tankshape;
+        fixturetank.density = 1.0f;
+        Fixture fixture = tbody.createFixture(fixturetank);
+        tbody.setUserData(tankbody);
+//        tankbody.setUserData(tbody);
+
+        // Tank Nosal Fixtures
+        tanknosal = new Sprite(new Texture("nosal.png"));
+        tanknosal.setPosition(50,1140);
+        tankbody.setPosition(50,1140);
+        tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
+        BodyDef body_tank_nosal = new BodyDef();
+        body_tank_nosal.type = BodyDef.BodyType.DynamicBody;
+        body_tank_nosal.position.set(tankbody.getX(), tankbody.getY());
+        Body nosalBody = world.createBody(body_tank);
+        PolygonShape nosalshape = new PolygonShape();
+        tankshape.setAsBox(tanknosal.getWidth() / 2, tanknosal.getHeight() / 2);
+        FixtureDef fixturenosal = new FixtureDef();
+        fixturenosal.shape = tankshape;
+        fixturenosal.density = 1.0f;
+        Fixture fixturen = tbody.createFixture(fixturetank);
+        nosalBody.setUserData(tanknosal);
+
+    }
+
+    public static World getWorld(){
+        return world;
+    }
     public void update(float delta){
 
         world.step(1/60f,6,2);
@@ -118,13 +174,37 @@ public class playscreen implements Screen{
         renderer.setView(camera);
     }
     public void handleInput(float delta){
-        if(Gdx.input.isKeyPressed(Input.Keys.A))
-            tankbody.setPosition(tankbody.getX() - 30*delta, tankbody.getY());
-            tanknosal.setPosition(tankbody.getX() - 30*delta, tankbody.getY());
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
 
-        if(Gdx.input.isKeyPressed(Input.Keys.D))
-            tankbody.setPosition(tankbody.getX() + 25*delta, tankbody.getY());
-            tanknosal.setPosition(tankbody.getX() + 25*delta, tankbody.getY());
+            tankbody.setPosition(tankbody.getX() - 30 * delta, tankbody.getY());
+            tanknosal.setPosition(tankbody.getX() - 30 * delta, tankbody.getY());
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
+            tankbody.setPosition(tankbody.getX() + 25 * delta, tankbody.getY());
+            tanknosal.setPosition(tankbody.getX() + 25 * delta, tankbody.getY());
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)){
+            // Create a new bullet fixture
+            FixtureDef bulletDef = new FixtureDef();
+            bulletDef.density = 1.0f;
+            bulletDef.friction = 0.0f;
+            bulletDef.restitution = 0.0f;
+            CircleShape bulletShape = new CircleShape();
+            bulletShape.setRadius(5f);
+            bulletDef.shape = bulletShape;
+            BodyDef bulletBodyDef = new BodyDef();
+            bulletBodyDef.type = BodyDef.BodyType.DynamicBody;
+            bulletBodyDef.position.set(fixture.getBody().getPosition());
+            Body bulletBody = world.createBody(bulletBodyDef);
+            bulletBody.createFixture(bulletDef);
+            // Calculate the impulse to apply to the bullet based on the angle of the fixture body
+            float angle = fixture.getBody().getAngle();
+            Vector2 impulse = new Vector2((float)Math.cos(angle), (float)Math.sin(angle));
+            impulse.scl(10.0f);
+            // Fire the bullet
+            bulletBody.applyLinearImpulse(impulse, bulletBody.getWorldCenter(), true);
+        }
     }
 
     @Override

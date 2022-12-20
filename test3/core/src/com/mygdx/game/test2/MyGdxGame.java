@@ -9,8 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class MyGdxGame extends Game {
 
     public static Skin gameSkin;
-    public static final int V_WIDTH = 1200;
-    public static final int V_HEIGHT = 700;
+    public static final int V_WIDTH = 1400;
+    public static final int V_HEIGHT = 600;
 
     public static final float PPM = 100;
     public SpriteBatch batch;
@@ -18,7 +18,7 @@ public class MyGdxGame extends Game {
 
     public void create () {
         gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
-        this.setScreen(new playscreen(this));
+        this.setScreen(new TitleScreen(this));
     }
 
     public void render () {
