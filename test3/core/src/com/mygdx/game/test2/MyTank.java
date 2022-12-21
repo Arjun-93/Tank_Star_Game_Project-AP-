@@ -3,6 +3,7 @@ package com.mygdx.game.test2;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class MyTank extends Sprite {
@@ -10,11 +11,18 @@ public class MyTank extends Sprite {
     public World world;
     public Body b2body;
 
+    // Bullet properties
+//    private Bullet bullet;
+    private Vector2 bulletVelocity;
+    private boolean bulletFired;
+
     public MyTank(playscreen screen, String str){
-        this.world = playscreen.getWorld();
+        this.world = screen.getWorld();
         defineTank();
         Sprite tankbody = new Sprite(new Texture(str));
         tankbody.setPosition(50, 1140);
+
+
     }
 
     public void update(float dt){

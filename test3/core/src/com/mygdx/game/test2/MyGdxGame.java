@@ -12,11 +12,12 @@ public class MyGdxGame extends Game {
     public static final int V_WIDTH = 1400;
     public static final int V_HEIGHT = 600;
 
-    public static final float PPM = 100;
-    public SpriteBatch batch;
+    public static final float PPM = 1;
+    public static SpriteBatch batch;
     public BitmapFont font;
 
     public void create () {
+        batch = new SpriteBatch();
         gameSkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
         this.setScreen(new TitleScreen(this));
     }

@@ -338,19 +338,6 @@ public class GameScreen extends ApplicationAdapter implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
 
-                if(q.peek().equals("Abrams")){
-                    abhramsnam.setPosition(130,220);
-                    img1.setPosition(180,300);
-                }
-                else if(q.peek().equals("Buratino")){
-                    buratinonam.setPosition(130,220);
-                    img2.setPosition(180,300);
-                } else if (q.peek().equals("Frost")) {
-                    frostnam.setPosition(130,220);
-                    img3.setPosition(180,300);
-                }
-
-                clickLeft(q);
 
                 if(q.peek().equals("Abrams")){
                     abhramsnam.setPosition(560,170);
@@ -377,6 +364,22 @@ public class GameScreen extends ApplicationAdapter implements Screen {
                     frostnam.setPosition(950,220);
                     img3.setPosition(1000,300);
                 }
+
+                clickLeft(q);
+
+                if(q.peek().equals("Abrams")){
+                    abhramsnam.setPosition(130,220);
+                    img1.setPosition(180,300);
+                }
+                else if(q.peek().equals("Buratino")){
+                    buratinonam.setPosition(130,220);
+                    img2.setPosition(180,300);
+                } else if (q.peek().equals("Frost")) {
+                    frostnam.setPosition(130,220);
+                    img3.setPosition(180,300);
+                }
+
+
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
