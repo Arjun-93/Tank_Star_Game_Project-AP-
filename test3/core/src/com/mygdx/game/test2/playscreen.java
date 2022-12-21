@@ -16,10 +16,14 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 
 public class playscreen implements Screen {
     public static class Bullet
@@ -52,6 +56,7 @@ public class playscreen implements Screen {
     private Box2DDebugRenderer b2dr;
     private Tanks Abrams;
     private  SpriteBatch batch;
+    private Stage stage;
 
     OrthographicCamera camera;
     SpriteBatch spriteBatch;
@@ -66,8 +71,9 @@ public class playscreen implements Screen {
 
 
 
-    public playscreen(Game game, String  str){
+    public playscreen(final Game game, String  str){
         this.game = game;
+        stage = new Stage();
         gamecam = new OrthographicCamera();
         gameport = new FitViewport(MyGdxGame.V_WIDTH/MyGdxGame.PPM, MyGdxGame.V_HEIGHT/MyGdxGame.PPM,gamecam);
         // Map loading
@@ -80,6 +86,23 @@ public class playscreen implements Screen {
         makeRigid(b2dr,world);
 
         Abrams = new Tanks(this, str);
+
+        Texture option = new Texture(Gdx.files.internal("options.png"));
+        ImageButton optionButton = new ImageButton(new TextureRegionDrawable(option));
+//        backButton.setWidth(Gdx.graphics.getWidth()/2);
+        optionButton.setSize(40,40);
+        optionButton.setPosition(15,555);
+        optionButton.addListener(new InputListener(){
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                game.setScreen(new PauseMenu(game));
+            }
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+        stage.addActor(optionButton);
 
 
     }
@@ -181,40 +204,8 @@ public class playscreen implements Screen {
         MyGdxGame.batch.end();
 
         b2dr.render(world, gamecam.combined);
-
-
-        // Bullet Variables
-//        Vector2 direction = (new Vector2(1.0f, 0.0f)).rotateDeg(angle); // unit vector of the direction of the player
-//        Vector2 origin = new Vector2(0.5f, 0.5f); // rotation origin, rotate around the center of the image. ( 0,0 would have been upper left corner)
-//        Vector2 offset = (new Vector2(barrelOffset)).rotateDeg(angle).add(origin); // Rotated barrel offset
-//        Vector2 barrelPosition = (new Vector2(position)).add(offset);
-//
-//        if (Gdx.input.isKeyPressed(Input.Keys.SPACE))
-//            bullets.add(new Bullet(barrelPosition, direction));
-//
-//        for(Bullet bullet : bullets)
-//            bullet.update(delta);
-//
-//        spriteBatch.draw(Abrams.tankNosal,
-//                position.x, position.y,
-//                0.5f, 0.5f,
-//                1, 1,
-//                1, 1,
-//                angle,
-//                0, 0,
-//                texture.getWidth(), texture.getHeight(),
-//                false, false);
-//
-//        spriteBatch.end();
-//
-//        shapeRenderer.setProjectionMatrix(camera.combined);
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-//
-//        shapeRenderer.setColor(Color.RED);
-//
-//        for(Bullet bullet : bullets)
-//            shapeRenderer.circle(bullet.position.x, bullet.position.y, 2f, 32);
-//        shapeRenderer.end();
+        stage.act();
+        stage.draw();
     }
 
     @Override
