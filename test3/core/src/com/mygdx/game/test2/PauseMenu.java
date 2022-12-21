@@ -21,11 +21,10 @@ public class PauseMenu implements Screen {
         // Resume Game Button
         TextButton resumeButton = new TextButton("Resume",MyGdxGame.gameSkin);
         resumeButton.setPosition(525,450);
-//        resumeButton.getAlign();
         resumeButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-//                game.setScreen(new OptionScreen(game));
+                game.setScreen(new OptionScreen(game));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

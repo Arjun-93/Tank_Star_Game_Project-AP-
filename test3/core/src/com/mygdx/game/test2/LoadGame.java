@@ -20,12 +20,15 @@ public class LoadGame implements Screen {
     private final Stage stage;
     private ShapeRenderer shapeRenderer;
     static private boolean projectionMatrixSet;
+    private GameScreen gameObject;
 
     public LoadGame(Game aGame) {
+
         this.game = aGame;
         stage = new Stage(new ScreenViewport());
         shapeRenderer = new ShapeRenderer();
         projectionMatrixSet = false;
+
 
         // Label Screen
         Label title = new Label("Load Screen", MyGdxGame.gameSkin,"big-black");
@@ -33,29 +36,49 @@ public class LoadGame implements Screen {
         title.setWidth(Gdx.graphics.getWidth());
         stage.addActor(title);
 
+        int i = 0;
+        for(final MyGdxGame game : MyGdxGame.savedGame){
+            i = 3;
+            Label dt1 = new Label(" Game " + i, MyGdxGame.gameSkin,"big-black");
+            dt1.setPosition(75,Gdx.graphics.getHeight() - 400);
+            // Play Button
+            Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
+            ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
+            playLG.setSize(40,40);
+            playLG.setPosition(1270,Gdx.graphics.getHeight() - 385);
+            playLG.addListener(new InputListener(){
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    game.setScreen(new OptionScreen(game ));
+                }
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    return true;
+                }
+            });
+            stage.addActor(playLG);
+            stage.addActor(dt1);
+        }
+
         // Date and Time text
-        Label dt1 = new Label(" 1] Played at: 22 November 2022 , 04:58 PM", MyGdxGame.gameSkin,"big-black");
+        Label dt1 = new Label(" Game 1 ", MyGdxGame.gameSkin,"big-black");
         dt1.setPosition(75,Gdx.graphics.getHeight() - 200);
-//        dt1.setWidth(Gdx.graphics.getWidth());
-//        dt1.setSize(200,200);
         stage.addActor(dt1);
 
-        Label dt2 = new Label("2] Played at: 25 November 2022 , 06:58 PM", MyGdxGame.gameSkin,"big-black");
+        Label dt2 = new Label("Game 2", MyGdxGame.gameSkin,"big-black");
         dt2.setPosition(75,Gdx.graphics.getHeight() - 300);
         dt2.setWidth(Gdx.graphics.getWidth());
-//        dt2.setSize(200,200);
         stage.addActor(dt2);
 
         // Play Button
         Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
         ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
-//        backButton.setWidth(Gdx.graphics.getWidth()/2);
         playLG.setSize(40,40);
         playLG.setPosition(1270,Gdx.graphics.getHeight() - 185);
         playLG.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-//                game.setScreen(new OptionScreen(game));
+                game.setScreen(new OptionScreen(game ));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -66,13 +89,12 @@ public class LoadGame implements Screen {
 
         Texture playLoadGame1 = new Texture(Gdx.files.internal("play.png"));
         ImageButton playLG1 = new ImageButton(new TextureRegionDrawable(playLoadGame1));
-//        backButton.setWidth(Gdx.graphics.getWidth()/2);
         playLG1.setSize(40,40);
         playLG1.setPosition(1270,Gdx.graphics.getHeight() - 285);
         playLG1.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-//                game.setScreen(new OptionScreen(game));
+                game.setScreen(new OptionScreen(game));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -84,7 +106,6 @@ public class LoadGame implements Screen {
 
         Texture back = new Texture(Gdx.files.internal("arrowHeadLeft.jpg"));
         ImageButton backButton = new ImageButton(new TextureRegionDrawable(back));
-//        backButton.setWidth(Gdx.graphics.getWidth()/2);
         backButton.setSize(20,20);
         backButton.setPosition(20,20);
         backButton.addListener(new InputListener(){

@@ -16,11 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -43,7 +39,7 @@ public class playscreen implements Screen {
         }
     }
     // Variables of Map.
-    private Game game;
+    private final Game game;
     private OrthogonalTiledMapRenderer renderer;
     private TiledMap map;
     private TmxMapLoader mapLoader;
@@ -52,21 +48,20 @@ public class playscreen implements Screen {
     private float Map_Height = 3600;
     private Viewport gameport;
 
-    private World world;
+    private final World world;
     private Box2DDebugRenderer b2dr;
     private Tanks Abrams;
     private  SpriteBatch batch;
-    private Stage stage;
+    private final Stage stage;
 
+    // Bullet Variables
     OrthographicCamera camera;
     SpriteBatch spriteBatch;
     ShapeRenderer shapeRenderer;
     Texture texture;
-
     Vector2 position;
     Vector2 barrelOffset;
     float angle;
-
     Array<Bullet> bullets;
 
 
@@ -85,24 +80,24 @@ public class playscreen implements Screen {
         b2dr = new Box2DDebugRenderer();
         makeRigid(b2dr,world);
 
-        Abrams = new Tanks(this, str);
+//        Abrams = new Tanks(this, str);
 
-        Texture option = new Texture(Gdx.files.internal("options.png"));
-        ImageButton optionButton = new ImageButton(new TextureRegionDrawable(option));
-//        backButton.setWidth(Gdx.graphics.getWidth()/2);
-        optionButton.setSize(40,40);
-        optionButton.setPosition(15,555);
-        optionButton.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new PauseMenu(game));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(optionButton);
+//        Texture option = new Texture(Gdx.files.internal("options.png"));
+//        ImageButton optionButton = new ImageButton(new TextureRegionDrawable(option));
+//        optionButton.setSize(40,40);
+//        optionButton.setPosition(15,555);
+//        optionButton.addListener(new InputListener(){
+//
+//            @Override
+//            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+//                game.setScreen(new PauseMenu(game));
+//            }
+//            @Override
+//            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//                return true;
+//            }
+//        });
+//        stage.addActor(optionButton);
 
 
     }

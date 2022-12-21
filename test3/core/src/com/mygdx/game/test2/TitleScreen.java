@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class TitleScreen extends ApplicationAdapter implements Screen {
 
     private Stage stage = null;
-    private final Game game;
+    private Game game;
     private Texture img;
     private Texture backgroundImage;
     private TextureRegion backgroundTexture;

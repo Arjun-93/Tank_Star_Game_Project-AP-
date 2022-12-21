@@ -248,7 +248,9 @@ class QueueCloner {
 public class GameScreen extends ApplicationAdapter implements Screen {
 
     private Stage stage;
-    private Game game;
+    private final Game game;
+
+    public static String str;
 
     public GameScreen(Game aGame) {
         this.game = aGame;
@@ -451,7 +453,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println(q);
-                String str = "Buratino.png";
+                str = "Buratino.png";
                 Queue<String> tempq = new LinkedList<>();
                 tempq = qc.cloneQueue(q);
                 tempq.poll();
@@ -462,40 +464,7 @@ public class GameScreen extends ApplicationAdapter implements Screen {
                 else if(tempq.peek().equals("Abrams")){
                     str = "AbramsLower.png";
                 }
-                //  Tank Body Fixtures
-//                Sprite tankbody = new Sprite(new Texture(str));
-//                tankbody.setPosition(50,1140);
-//                tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
-//                BodyDef body_tank = new BodyDef();
-//                body_tank.type = BodyDef.BodyType.DynamicBody;
-//                body_tank.position.set(tankbody.getX(), tankbody.getY());
-//                Body tbody = playscreen.getWorld().createBody(body_tank);
-//                PolygonShape tankshape = new PolygonShape();
-//                tankshape.setAsBox(tankbody.getWidth() / 2, tankbody.getHeight() / 2);
-//                FixtureDef fixturetank = new FixtureDef();
-//                fixturetank.shape = tankshape;
-//                fixturetank.density = 1.0f;
-//                Fixture fixture = tbody.createFixture(fixturetank);
-//                tbody.setUserData(tankbody);
-////        tankbody.setUserData(tbody);
-//
-//                // Tank Nosal Fixtures
-//                Sprite tanknosal = new Sprite(new Texture("nosal.png"));
-//                tanknosal.setPosition(50,1140);
-//                tankbody.setPosition(50,1140);
-//                tankbody.setSize(tankbody.getWidth() - 200, tankbody.getHeight());
-//                BodyDef body_tank_nosal = new BodyDef();
-//                body_tank_nosal.type = BodyDef.BodyType.DynamicBody;
-//                body_tank_nosal.position.set(tankbody.getX(), tankbody.getY());
-//                Body nosalBody = playscreen.getWorld().createBody(body_tank);
-//                PolygonShape nosalshape = new PolygonShape();
-//                tankshape.setAsBox(tanknosal.getWidth() / 2, tanknosal.getHeight() / 2);
-//                FixtureDef fixturenosal = new FixtureDef();
-//                fixturenosal.shape = tankshape;
-//                fixturenosal.density = 1.0f;
-//                Fixture fixturen = tbody.createFixture(fixturetank);
-//                nosalBody.setUserData(tanknosal);
-                game.setScreen(new playscreen(game,str));
+                game.setScreen(new OptionScreen(game));
             }
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -504,7 +473,6 @@ public class GameScreen extends ApplicationAdapter implements Screen {
         });
         stage.addActor(backButton);
     }
-
     @Override
     public void show() {
         Gdx.app.log("MainScreen","show");

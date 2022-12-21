@@ -13,41 +13,76 @@ public class Tanks extends Sprite {
 
     public playscreen screen;
     public Sprite tankLower, tankNosal;
-
+    public Sprite tankNosal2;
     // Bullets Variables
     Vector2 position, barrelOffset;
     float angle;
 
 //    Array<Bullet> bullets = new Array<Bullet>();
 
-    public Tanks(playscreen screen, String str){
+    public Tanks(OptionScreen screen){
         this.world = screen.getWorld();
-        defineTanks();
         defineBullets();
-
-        tankLower = new Sprite(new Texture(str));
-        tankNosal = new Sprite(new Texture("nosal.png"));
-        tankLower.setPosition(50,290);
-        tankNosal.setPosition(120,360);
-        tankLower.setSize(200, 100);
-        tankNosal.setSize(150,30);
-
-
+//        tankLower = new Sprite(new Texture(GameScreen.str));
+//        tankNosal = new Sprite(new Texture("nosal.png"));
+//
+//        tankLower.setPosition(50,290);
+//        tankNosal.setPosition(120,360);
+//
+//        tankLower.setSize(200, 100);
+//        tankNosal.setSize(150,30);
+    }
+    public void createTank(){
 
     }
 
-    public void defineTanks(){
-        BodyDef bdef = new BodyDef();
-        bdef.position.set(225/MyGdxGame.PPM,1140/MyGdxGame.PPM);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
+    public void setPosition(float x, float y){
+        tankLower.setPosition(x,y);
+    }
 
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape =  new CircleShape();
-        shape.setRadius(100/MyGdxGame.PPM);
+    public void defineTanks(int x, int y, int tankWidth, int tankHeight, Boolean flip){
+        if(flip) {
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(225 / MyGdxGame.PPM, 1140 / MyGdxGame.PPM);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
 
-        fdef.shape = shape;
-        b2body.createFixture(fdef);
+            FixtureDef fdef = new FixtureDef();
+            CircleShape shape = new CircleShape();
+            shape.setRadius(100 / MyGdxGame.PPM);
+
+            fdef.shape = shape;
+            b2body.createFixture(fdef);
+
+            tankLower = new Sprite(new Texture(GameScreen.str));
+            tankNosal = new Sprite(new Texture("nosal.png"));
+
+            tankLower.setPosition(x, y);
+            tankNosal.setPosition(120, 360);
+            tankLower.setSize(tankWidth, tankHeight);
+            tankNosal.setSize(150, 30);
+        }
+        if (!flip){
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(x / MyGdxGame.PPM, y / MyGdxGame.PPM);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            FixtureDef fdef = new FixtureDef();
+            CircleShape shape = new CircleShape();
+            shape.setRadius(100 / MyGdxGame.PPM);
+
+            fdef.shape = shape;
+            b2body.createFixture(fdef);
+
+            tankLower = new Sprite(new Texture("Buratino2.png"));
+            tankNosal = new Sprite(new Texture("Inverted-nosal.png"));
+
+            tankLower.setPosition(x, y);
+            tankNosal.setPosition(x, 360);
+            tankLower.setSize(tankWidth, tankHeight);
+            tankNosal.setSize(150, 30);
+        }
     }
 
     public void defineBullets(){
