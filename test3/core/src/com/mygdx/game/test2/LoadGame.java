@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.Iterator;
+
 public class LoadGame implements Screen {
 
     private final Game game;
@@ -37,71 +39,88 @@ public class LoadGame implements Screen {
         stage.addActor(title);
 
         int i = 0;
-        for(final MyGdxGame game : MyGdxGame.savedGame){
-            i = 3;
-            Label dt1 = new Label(" Game " + i, MyGdxGame.gameSkin,"big-black");
-            dt1.setPosition(75,Gdx.graphics.getHeight() - 400);
-            // Play Button
-            Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
-            ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
-            playLG.setSize(40,40);
-            playLG.setPosition(1270,Gdx.graphics.getHeight() - 385);
-            playLG.addListener(new InputListener(){
-                @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    game.setScreen(new OptionScreen(game ));
-                }
-                @Override
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-            });
-            stage.addActor(playLG);
-            stage.addActor(dt1);
+        int setheight = 200;
+        int setplaybuttonheight = 185;
+        Iterator<Game> iter = MyGdxGame.savedGame.iterator();
+//        while(iter.hasNext()){
+//            Label dt1 = new Label(" Game " , MyGdxGame.gameSkin,"big-black");
+//            dt1.setPosition(75,Gdx.graphics.getHeight() - setheight);
+//        }
+        for(final Game game : MyGdxGame.savedGame){
+            if(MyGdxGame.savedGame.size() == 0){
+                Gdx.app.exit();
+            }
+            if(MyGdxGame.savedGame.size()>0){
+                i += 1;
+                Label dt1 = new Label(" Game " + i, MyGdxGame.gameSkin,"big-black");
+                dt1.setPosition(75,Gdx.graphics.getHeight() - setheight);
+                // Play Button
+                Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
+                ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
+                playLG.setSize(40,40);
+                playLG.setPosition(1270,Gdx.graphics.getHeight() - setplaybuttonheight);
+                setheight +=100;
+                setplaybuttonheight += 100;
+
+
+                playLG.addListener(new InputListener(){
+                    @Override
+                    public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                        game.setScreen(new OptionScreen(game ));
+                    }
+                    @Override
+                    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                        return true;
+                    }
+                });
+                stage.addActor(playLG);
+                stage.addActor(dt1);
+            }
+
         }
 
-        // Date and Time text
-        Label dt1 = new Label(" Game 1 ", MyGdxGame.gameSkin,"big-black");
-        dt1.setPosition(75,Gdx.graphics.getHeight() - 200);
-        stage.addActor(dt1);
-
-        Label dt2 = new Label("Game 2", MyGdxGame.gameSkin,"big-black");
-        dt2.setPosition(75,Gdx.graphics.getHeight() - 300);
-        dt2.setWidth(Gdx.graphics.getWidth());
-        stage.addActor(dt2);
-
-        // Play Button
-        Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
-        ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
-        playLG.setSize(40,40);
-        playLG.setPosition(1270,Gdx.graphics.getHeight() - 185);
-        playLG.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new OptionScreen(game ));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(playLG);
-
-        Texture playLoadGame1 = new Texture(Gdx.files.internal("play.png"));
-        ImageButton playLG1 = new ImageButton(new TextureRegionDrawable(playLoadGame1));
-        playLG1.setSize(40,40);
-        playLG1.setPosition(1270,Gdx.graphics.getHeight() - 285);
-        playLG1.addListener(new InputListener(){
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                game.setScreen(new OptionScreen(game));
-            }
-            @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-        });
-        stage.addActor(playLG1);
+//        // Date and Time text
+//        Label dt1 = new Label(" Game 1 ", MyGdxGame.gameSkin,"big-black");
+//        dt1.setPosition(75,Gdx.graphics.getHeight() - 200);
+//        stage.addActor(dt1);
+//
+//        Label dt2 = new Label("Game 2", MyGdxGame.gameSkin,"big-black");
+//        dt2.setPosition(75,Gdx.graphics.getHeight() - 300);
+//        dt2.setWidth(Gdx.graphics.getWidth());
+//        stage.addActor(dt2);
+//
+//        // Play Button
+//        Texture playLoadGame = new Texture(Gdx.files.internal("play.png"));
+//        ImageButton playLG = new ImageButton(new TextureRegionDrawable(playLoadGame));
+//        playLG.setSize(40,40);
+//        playLG.setPosition(1270,Gdx.graphics.getHeight() - 185);
+//        playLG.addListener(new InputListener(){
+//            @Override
+//            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+//                game.setScreen(new OptionScreen(game ));
+//            }
+//            @Override
+//            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//                return true;
+//            }
+//        });
+//        stage.addActor(playLG);
+//
+//        Texture playLoadGame1 = new Texture(Gdx.files.internal("play.png"));
+//        ImageButton playLG1 = new ImageButton(new TextureRegionDrawable(playLoadGame1));
+//        playLG1.setSize(40,40);
+//        playLG1.setPosition(1270,Gdx.graphics.getHeight() - 285);
+//        playLG1.addListener(new InputListener(){
+//            @Override
+//            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+//                game.setScreen(new OptionScreen(game));
+//            }
+//            @Override
+//            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+//                return true;
+//            }
+//        });
+//        stage.addActor(playLG1);
 
 
         Texture back = new Texture(Gdx.files.internal("arrowHeadLeft.jpg"));

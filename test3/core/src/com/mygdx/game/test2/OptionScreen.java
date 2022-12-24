@@ -49,6 +49,9 @@ public class OptionScreen implements Screen {
 
     private SpriteBatch batch;
 
+    private  TitleScreen title;
+
+
 //    private GamePlay tiledmap;
     public OptionScreen(Game aGame) {
 
@@ -71,6 +74,7 @@ public class OptionScreen implements Screen {
         player2 = new Tanks(this);
         player2.defineTanks(1200, 290,200,100,false);
 
+        title = new TitleScreen(game);
 //        // Angle and Power
 //        Texture angleImage = new Texture(Gdx.files.local("angle.png"));
 //        Image angle = new Image(angleImage);
@@ -166,12 +170,14 @@ public class OptionScreen implements Screen {
             player1.tankLower.setPosition(player1.tankLower.getX()+27*delta, player1.tankLower.getY());
             player1.tankNosal.setPosition(player1.tankNosal.getX()+27*delta, player1.tankNosal.getY());
             player1.b2body.setLinearVelocity(new Vector2(50,0));
+//            title.playSound();
 
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)){
             player1.tankLower.setPosition(player1.tankLower.getX()-27*delta, player1.tankLower.getY());
             player1.tankNosal.setPosition(player1.tankNosal.getX()-27*delta, player1.tankNosal.getY());
             player1.b2body.setLinearVelocity(new Vector2(-50,0));
+
         }
         if ((!Gdx.input.isKeyPressed(Input.Keys.D) &&
                 !Gdx.input.isKeyPressed(Input.Keys.A) &&
@@ -304,4 +310,23 @@ public class OptionScreen implements Screen {
     public Game getGame() {
         return this.game;
     }
+    public static class Bullet
+    {
+        public Vector2 position = new Vector2();
+        public Vector2 direction = new Vector2();
+
+        public Bullet(Vector2 position,  Vector2 direction)
+        {
+            this.position.set(position);
+            this.direction.set(direction);
+        }
+
+        public void update(float delta) {
+            float speed = 16.0f;
+            position.add(direction.x * delta * speed, direction.y * delta * speed);
+        }
+    }
+
 }
+
+

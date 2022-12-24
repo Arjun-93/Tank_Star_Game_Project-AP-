@@ -95,38 +95,46 @@ public class Tanks extends Sprite {
         bulletDef.friction = 0.0f;
         bulletDef.restitution = 0.0f;
         CircleShape bulletShape = new CircleShape();
-        bulletShape.setRadius(5f);
+        bulletShape.setRadius(10f);
 
         bulletDef.shape = bulletShape;
         bulletBody.createFixture(bulletDef);
     }
 
+//    public void update(float delta){
+//        setPosition(b2body.getPosition().x-getWidth()/2, b2body.getPosition().y-getHeight()/2);
+//    }
+public static class healthbar{
+    private static healthbar playerHealth = null;
+    public healthbar getPlayerHealth(){
+        if (playerHealth == null){
+            playerHealth = new healthbar();
+        }
+        return  playerHealth;
+    }
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    float playerHealth = 1.0f;
+    float tankhealth = 1.0f;
 
     public void renderHealth(float delta) {
-        if (playerHealth > 0.5) {
+        if (tankhealth > 0.5) {
             shapeRenderer.setColor(Color.GREEN);
-        } else if (playerHealth > 0.25) {
+        } else if (tankhealth > 0.25) {
             shapeRenderer.setColor(Color.YELLOW);
         } else {
             shapeRenderer.setColor(Color.RED);
         }
 
-        float healthBarWidth = playerHealth * 100;
+        float healthBarWidth = tankhealth * 100;
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.rect(200, 300, 200, 40);
         shapeRenderer.end();
     }
     public void takeDamage() {
-        playerHealth -= 0.1f;
+        tankhealth -= 0.1f;
     }
 
-
-//    public void update(float delta){
-//        setPosition(b2body.getPosition().x-getWidth()/2, b2body.getPosition().y-getHeight()/2);
-//    }
+}
 
 }
 

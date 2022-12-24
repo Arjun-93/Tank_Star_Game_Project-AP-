@@ -185,7 +185,7 @@ public class playscreen implements Screen {
     @Override
     public void render(float delta) {
         update(delta);
-        Abrams.renderHealth(delta);
+//        Abrams.(delta);
         Gdx.gl.glClearColor(1/255f, 41/255f, 55/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         renderer.render();

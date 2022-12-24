@@ -14,7 +14,7 @@ public class PauseMenu implements Screen {
     private final Game game;
     private final Stage stage;
 
-    public PauseMenu(Game aGame){
+    public PauseMenu(final Game aGame){
         this.game = aGame;
         stage = new Stage(new ScreenViewport());
 
@@ -40,6 +40,7 @@ public class PauseMenu implements Screen {
         optionsButton.addListener(new InputListener(){
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                MyGdxGame.savedGame.add(game);
                 game.setScreen(new TitleScreen(game));}
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {

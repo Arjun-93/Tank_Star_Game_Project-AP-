@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -106,6 +107,10 @@ public class TitleScreen extends ApplicationAdapter implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
+    public void playMusic(){
+        playMusic pm = new playMusic();
+        pm.run();
+    }
 
     public void create(){
         backgroundImage = new Texture(("C:\\Users\\arjun\\Downloads\\test3\\assets\\tank-stars-pc-full-version.jpg"));
@@ -143,5 +148,36 @@ public class TitleScreen extends ApplicationAdapter implements Screen {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    public void playSound(){
+        tankSound ts = new tankSound();
+        ts.run();
+    }
+
+
+}
+
+class playMusic extends Thread{
+    private static com.badlogic.gdx.Game Game;
+    static TitleScreen tx = new TitleScreen(Game);
+    @Override
+        public void run(){
+            // Adding Music
+            tx.gameMusic = Gdx.audio.newMusic(Gdx.files.internal("Audios\\Music\\tank-battle-13719.mp3"));
+            tx.gameMusic.setVolume(0.2f);
+            tx.gameMusic.setLooping(true);
+            tx.gameMusic.play();
+    }
+}
+
+class tankSound extends Thread{
+    Sound tankSound;
+
+    @Override
+    public void run() {
+        tankSound = Gdx.audio.newSound(Gdx.files.internal("Audios/Sound/mixkit-tank-engine-working-2753.wav"));
+        tankSound.setLooping(1,true);
+        tankSound.play();
     }
 }
